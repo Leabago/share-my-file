@@ -21,7 +21,7 @@ func (app *application) createSnippetForm(w http.ResponseWriter, r *http.Request
 }
 
 func (app *application) showSnippet(w http.ResponseWriter, r *http.Request) {
-	code := r.URL.Query().Get(":id")
+	code := r.URL.Query().Get(":code")
 	fullURL := r.Host + r.URL.Path
 
 	var png []byte
@@ -32,7 +32,6 @@ func (app *application) showSnippet(w http.ResponseWriter, r *http.Request) {
 	base64ImageData := base64.StdEncoding.EncodeToString(png)
 
 	fileNameList := app.redisClient.LRange(app.getAvailableKey(code), 0, -1).Val()
-	fmt.Println("fileNames:", fileNameList)
 
 	var file = &models.File{
 		FolderCode:   code,
@@ -67,7 +66,7 @@ func (app *application) showSnippet(w http.ResponseWriter, r *http.Request) {
 }
 
 func (app *application) getSnippet(w http.ResponseWriter, r *http.Request) {
-	code := r.URL.Query().Get(":id")
+	code := r.URL.Query().Get(":code")
 
 	// var file = &models.File{
 	// 	FolderCode: code,
