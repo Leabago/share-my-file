@@ -159,6 +159,7 @@ func (app *application) render(w http.ResponseWriter, r *http.Request, name stri
 func createUserCode() string {
 	chars := []rune(
 		"abcdefghijklmnopqrstuvwxyz" +
+			"ABCDEFGHIJKLMNOPQRSTUVWXYZ" +
 			"0123456789")
 	length := 6
 	var b strings.Builder

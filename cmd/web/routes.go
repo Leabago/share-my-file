@@ -21,10 +21,10 @@ func (app *application) routes() http.Handler {
 	// mux.Post("/snippet/create", dynamicMiddleware.Append(app.requireAuthentication).ThenFunc(app.createSnippet))
 
 	mux.Get("/", dynamicMiddleware.ThenFunc(app.redirectHome))
-	mux.Get("/upload", dynamicMiddleware.ThenFunc(app.createSnippetForm))
-	mux.Post("/upload", dynamicMiddleware.ThenFunc(app.homeGetFiles))
-	mux.Get("/archive/:id", dynamicMiddleware.ThenFunc(app.showSnippet))
-	mux.Get("/archive/download/:id", dynamicMiddleware.ThenFunc(app.getSnippet))
+	mux.Get("/upload/:code", dynamicMiddleware.ThenFunc(app.createSnippetForm))
+	mux.Post("/upload/:code", dynamicMiddleware.ThenFunc(app.homeGetFiles))
+	mux.Get("/archive/:code", dynamicMiddleware.ThenFunc(app.showSnippet))
+	mux.Get("/archive/download/:code", dynamicMiddleware.ThenFunc(app.getSnippet))
 
 	mux.Get("/download", dynamicMiddleware.ThenFunc(app.createDownloadForm))
 

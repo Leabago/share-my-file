@@ -92,8 +92,10 @@ func (app *application) getSnippet(w http.ResponseWriter, r *http.Request) {
 
 // homeGetFiles upload files to zip
 func (app *application) homeGetFiles(w http.ResponseWriter, r *http.Request) {
+	code := r.URL.Query().Get(":code")
 	// get folder name
-	var code = createUserCode()
+
+	fmt.Print("code:= ", code)
 	var zipFileName = folderPath + folderBegin + code + zipName
 	app.logger.infoLog.Printf("create new folder %s", zipFileName)
 	fileNameList, err := ParseMediaType(r, zipFileName, app.maxFileSize)
@@ -104,7 +106,9 @@ func (app *application) homeGetFiles(w http.ResponseWriter, r *http.Request) {
 	// send key to redis. key is going to expire
 	app.redisClient.RPush((app.getAvailableKey(code)), fileNameList)
 	app.redisClient.Expire(app.getAvailableKey(code), smallTime).Result()
-	w.Write([]byte(code))
+	// w.Write([]byte(code))
+
+	http.Redirect(w, r, ("/archive/" + code), http.StatusSeeOther)
 }
 
 func (app *application) getAvailableKey(code string) string {
@@ -129,7 +133,8 @@ func (app *application) createDownloadForm(w http.ResponseWriter, r *http.Reques
 }
 
 func (application *application) redirectHome(w http.ResponseWriter, r *http.Request) {
-	http.Redirect(w, r, "/upload", http.StatusSeeOther)
+	code := createUserCode()
+	http.Redirect(w, r, "/upload/"+code, http.StatusSeeOther)
 }
 
 func check(e error) {
